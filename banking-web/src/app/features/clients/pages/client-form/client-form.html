@@ -1,0 +1,54 @@
+<div class="page-container">
+  <h1>{{ personId ? 'Editar Cliente' : 'Nuevo Cliente' }}</h1>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="form-card">
+    
+    <div class="form-group">
+      <label>Nombre Completo</label>
+      <input type="text" formControlName="name" placeholder="Ej. Jose Lema">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group half">
+        <label>Identificación (DNI)</label>
+        <input type="text" formControlName="identification" placeholder="Ej. 1234567890">
+      </div>
+
+      <div class="form-group half">
+        <label>Género</label>
+        <div class="select-wrapper">
+          <select formControlName="gender">
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group half">
+        <label>Edad</label>
+        <input type="number" formControlName="age" placeholder="Ej. 30">
+      </div>
+
+      <div class="form-group half">
+        <label>Teléfono</label>
+        <input type="text" formControlName="phone" placeholder="Ej. 098254785">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Dirección</label>
+      <input type="text" formControlName="address" placeholder="Ej. Av. Principal 123">
+    </div>
+
+    <div class="form-actions">
+      <button type="button" routerLink="/clientes" class="btn-secondary">Cancelar</button>
+      <button type="submit" class="btn-primary" [disabled]="form.invalid">
+        {{ personId ? 'Guardar Cambios' : 'Crear Cliente' }}
+      </button>
+    </div>
+
+  </form>
+</div>

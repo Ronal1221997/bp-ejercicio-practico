@@ -1,0 +1,67 @@
+<div class="page-container">
+  <h1>Cuentas</h1>
+
+ <div class="actions-bar">
+    <input type="text" 
+           placeholder="Buscar por número o cliente..." 
+           class="search-input"
+           (input)="onSearch($event)">
+           
+    <button class="btn-primary" routerLink="/cuentas/nueva">Nueva Cuenta</button>
+</div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Cliente</th>
+          <th>Tipo</th>
+          <th>Saldo Inicial</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (accounts$ | async; as accounts) {
+          
+          @for (acc of accounts; track acc.accountNumber) {
+            <tr>
+              <td class="font-mono">{{ acc.accountNumber }}</td>
+              
+              <td>{{ acc.customerName }}</td>
+              
+              <td>
+                <span class="badge" [class.savings]="acc.accountType === 'Ahorro'">
+                  {{ acc.accountType }}
+                </span>
+              </td>
+              
+              <td class="amount">{{ acc.initialBalance | currency }}</td>
+              
+              <td>
+                <span class="status-indicator" [class.inactive]="!acc.status">
+                    {{ acc.status ? 'Activa' : 'Inactiva' }}
+                </span>
+              </td>
+              
+              <td>
+                <button class="btn-icon" [routerLink]="['/cuentas/editar', acc.accountNumber]" title="Editar">
+                  ✏️
+                </button>
+                <button class="btn-icon delete" (click)="deleteAccount(acc)" title="Eliminar">
+                  🗑️
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="empty-state">No hay cuentas registradas</td>
+            </tr>
+          }
+
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

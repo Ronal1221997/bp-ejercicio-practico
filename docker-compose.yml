@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  # Servicio 1: Base de Datos
+  db-mariadb:
+    image: mariadb:latest
+    container_name: banking_db_server
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: "Pichincha2025Root" # Contraseña Super Admin
+      MARIADB_DATABASE: "BankingSystem"
+      MARIADB_USER: "usuario_dev"
+      MARIADB_PASSWORD: "Pichincha2025"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      # Mapeamos la carpeta 'scripts' local a la carpeta de inicio del contenedor
+      - ./scripts:/docker-entrypoint-initdb.d
+
+  # Servicio 2: Administración General (Interfaz Web)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: banking_admin_ui
+    restart: always
+    depends_on:
+      - db-mariadb
+    ports:
+      - "8080:80" # Accederás por localhost:8080
+    environment:
+      PMA_HOST: db-mariadb        # Debe coincidir con el nombre del servicio de arriba
+      PMA_PORT: 3306
+      UPLOAD_LIMIT: 64M
+
+volumes:
+  mariadb_data:

@@ -1,0 +1,48 @@
+<div class="page-container">
+  <h1>Registrar Movimiento</h1>
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="form-card">
+    
+    <div class="form-group">
+      <label>Cuenta de Origen/Destino</label>
+      <div class="select-wrapper">
+        <select formControlName="accountNumber">
+          <option value="" disabled>Seleccione una cuenta</option>
+          
+          @if (accounts$ | async; as accounts) {
+            @for (acc of accounts; track acc.accountNumber) {
+              <option [value]="acc.accountNumber">
+                {{ acc.accountNumber }} - {{ acc.customerName }} (Saldo: {{ acc.initialBalance | currency }})
+              </option>
+            }
+          } @else {
+            <option disabled>Cargando cuentas...</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group half">
+        <label>Tipo de Transacción</label>
+        <div class="select-wrapper">
+          <select formControlName="transactionType">
+            <option value="Deposito">Depósito (+)</option>
+            <option value="Retiro">Retiro (-)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group half">
+        <label>Monto ($)</label>
+        <input type="number" formControlName="amount" placeholder="Ej. 50.00">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" routerLink="/movimientos" class="btn-secondary">Cancelar</button>
+      <button type="submit" class="btn-primary" [disabled]="form.invalid">Procesar</button>
+    </div>
+
+  </form>
+</div>

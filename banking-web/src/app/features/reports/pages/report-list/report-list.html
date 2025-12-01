@@ -1,0 +1,84 @@
+<div class="page-container">
+    <h1>Reportes</h1>
+
+    <div class="filter-card">
+        <form [formGroup]="filterForm" (ngSubmit)="generateReport()" class="inline-form">
+
+            <div class="form-group">
+                <label>Desde:</label>
+                <input type="date" formControlName="startDate">
+            </div>
+
+            <div class="form-group">
+                <label>Hasta:</label>
+                <input type="date" formControlName="endDate">
+            </div>
+
+            <div class="form-group">
+                <label>Cliente:</label>
+                <div class="select-wrapper">
+                    <select formControlName="clienteId">
+                        <option [ngValue]="0">-- Todos los Clientes --</option>
+                        @for (cust of customers; track cust.customerId) {
+                        <option [value]="cust.customerId">{{ cust.personName }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary" [disabled]="filterForm.invalid || isLoading">
+                @if (isLoading) {
+                <span>⏳ Generando...</span>
+                } @else {
+                <span>Generar</span>
+                }
+            </button>
+
+            @if (base64Pdf) {
+            <button type="button" class="btn-secondary" (click)="downloadPdf()">
+                📥 Descargar PDF
+            </button>
+            }
+
+        </form>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Cuenta</th>
+                    <th>Tipo</th>
+                    <th>Saldo Inicial</th>
+                    <th>Movimiento</th>
+                    <th>Disponible</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (isLoading) {
+                } @else {
+                @for (item of reportData; track $index) {
+                <tr>
+                    <td>{{ item.Fecha }}</td>
+                    <td>{{ item.Cliente }}</td>
+
+                    <td class="font-mono">{{ item['Numero Cuenta'] }}</td>
+
+                    <td>{{ item.Tipo }}</td>
+                    <td class="amount">{{ item['Saldo Inicial'] | currency }}</td>
+
+                    <td [class.negative]="item.Movimiento.includes('-')">
+                        {{ item.Movimiento }}
+                    </td>
+
+                    <td class="amount bold">{{ item['Saldo Disponible'] | currency }}</td>
+                </tr>
+                } @empty {
+                }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

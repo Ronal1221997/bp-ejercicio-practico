@@ -1,0 +1,48 @@
+<div class="page-container">
+  <h1>{{ isEditMode ? 'Actualizar Credenciales' : 'Asignar Credenciales' }}</h1>
+  
+  <p class="subtitle">
+    Usuario: <strong>{{ personName }}</strong>
+  </p>
+
+  @if (isEditMode) {
+    <div class="alert-box">
+      <span class="icon">ℹ️</span>
+      <div class="content">
+        <strong>Este usuario ya tiene credenciales.</strong>
+        <p>Ingrese una nueva contraseña para actualizarla.</p>
+      </div>
+    </div>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="save()" class="form-card">
+    
+    <div class="form-group">
+      <label>Contraseña {{ isEditMode ? '(Nueva)' : '' }}</label>
+      <input type="password" formControlName="password" placeholder="Ingrese contraseña">
+      
+      @if (form.get('password')?.touched && form.get('password')?.invalid) {
+        <span class="error-text">Mínimo 4 caracteres requeridos.</span>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Estado</label>
+      <div class="select-wrapper">
+        <select formControlName="status">
+          <option [ngValue]="true">Activo</option>
+          <option [ngValue]="false">Inactivo</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" routerLink="/clientes" class="btn-secondary">Cancelar</button>
+      
+      <button type="submit" class="btn-primary" [disabled]="form.invalid">
+        {{ isEditMode ? 'Actualizar Contraseña' : 'Crear Cliente' }}
+      </button>
+    </div>
+
+  </form>
+</div>

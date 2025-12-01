@@ -1,0 +1,72 @@
+<div class="page-container">
+    <h1>{{ accountNumber ? 'Editar Cuenta' : 'Nueva Cuenta' }}</h1>
+
+    <form [formGroup]="form" (ngSubmit)="save()" class="form-card">
+
+        <div class="form-group">
+            <label>Número de Cuenta</label>
+            <input type="number" formControlName="accountNumber" placeholder="Ej. 445566">
+            @if (!accountNumber) {
+            <small class="hint">Número de cuenta generado.</small>
+            }
+        </div>
+
+        <div class="form-group">
+            <label>Cliente Titular</label>
+            <div class="select-wrapper">
+                <select formControlName="customerId">
+                    <option value="" disabled>Seleccione un cliente</option>
+
+                    @if (customers$ | async; as customers) {
+
+                    @for (cust of customers; track cust.customerId) {
+                    <option [value]="cust.customerId">
+                        {{ cust.personName }}
+                    </option>
+                    }
+
+                    } @else {
+                    <option disabled>Cargando clientes...</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group half">
+                <label>Tipo de Cuenta</label>
+                <div class="select-wrapper">
+                    <select formControlName="accountType">
+                        <option value="Ahorro">Ahorro</option>
+                        <option value="Corriente">Corriente</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group half">
+                <label>Saldo Inicial ($)</label>
+                <input type="number" formControlName="initialBalance" placeholder="0.00">
+            </div>
+        </div>
+
+        @if (accountNumber) {
+        <div class="form-group">
+            <label>Estado</label>
+            <div class="select-wrapper">
+                <select formControlName="status">
+                    <option [ngValue]="true">Activa</option>
+                    <option [ngValue]="false">Inactiva</option>
+                </select>
+            </div>
+        </div>
+        }
+
+        <div class="form-actions">
+            <button type="button" routerLink="/cuentas" class="btn-secondary">Cancelar</button>
+            <button type="submit" class="btn-primary" [disabled]="form.invalid">
+                {{ accountNumber ? 'Guardar Cambios' : 'Crear Cuenta' }}
+            </button>
+        </div>
+
+    </form>
+</div>

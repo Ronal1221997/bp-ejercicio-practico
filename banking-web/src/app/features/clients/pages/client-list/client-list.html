@@ -1,0 +1,58 @@
+<div class="page-container">
+    <h1>Clientes</h1>
+
+    <div class="actions-bar">
+        <input type="text" placeholder="Buscar por nombre o identificación..." class="search-input"
+            (input)="onSearch($event)">
+        <button class="btn-primary" routerLink="/clientes/nuevo">Nuevo</button>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Identificación</th>
+                    <th>Nombre Completo</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (clients$ | async; as clients) {
+
+                @for (client of clients; track client.personId) {
+                <tr>
+                    <td>{{ client.identification }}</td>
+
+                    <td>{{ client.name }}</td>
+
+                    <td>{{ client.phone }}</td>
+
+                    <td>
+                        <button class="btn-icon" [routerLink]="['/clientes/editar', client.personId]"
+                            title="Editar Datos">
+                            ✏️
+                        </button>
+
+                        <button class="btn-icon key" [routerLink]="['/clientes/asignar', client.personId]"
+                            title="Crear Credenciales (Cliente)">
+                            🔑
+                        </button>
+
+                        <button class="btn-icon delete" (click)="deleteClient(client)" title="Eliminar">
+                            🗑️
+                        </button>
+                    </td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="4" class="empty-state">No hay clientes registrados</td>
+                </tr>
+                }
+
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>

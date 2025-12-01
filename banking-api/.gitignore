@@ -1,0 +1,37 @@
+## Ignorar carpetas de compilación y salida (Crucial)
+bin/
+obj/
+
+## Visual Studio (Archivos de usuario y cache)
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Visual Studio Code
+.vscode/
+
+## Rider / IntelliJ
+.idea/
+
+## Archivos de entorno y secretos (Seguridad)
+.env
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+## Base de datos y Logs
+*.log
+*.sqlite
+
+## Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+## Test Results
+TestResults/
+*.trx
+
+## Coverage
+*.cobertura.xml

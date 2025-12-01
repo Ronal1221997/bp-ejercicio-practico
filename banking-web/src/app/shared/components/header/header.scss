@@ -1,0 +1,22 @@
+.top-bar {
+  height: 60px;
+  background-color: white;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra el logo horizontalmente como en la imagen */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra suave */
+}
+
+.logo-area {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #002366; /* Azul oscuro corporativo */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .icon {
+    font-size: 1.5rem;
+  }
+}
