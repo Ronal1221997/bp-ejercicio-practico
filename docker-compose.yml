@@ -1,13 +1,41 @@
 version: '3.8'
 
 services:
-  # Servicio 1: Base de Datos
+  # --- BACKEND (.NET 8) ---
+  banking-api:
+    build:
+      context: ./banking-api
+      dockerfile: Dockerfile
+    container_name: banking_api_core
+    restart: always
+    ports:
+      - "5000:8080" # .NET 8 escucha en 8080 por defecto dentro del contenedor
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      # Cadena de conexión apuntando al NOMBRE DEL SERVICIO de la BD (banking_db_server), no localhost
+      - ConnectionStrings__DefaultConnection=Server=banking_db_server;Port=3306;Database=BankingSystem;User=root;Password=Pichincha2025Root;
+    depends_on:
+      - db-mariadb
+
+  # --- FRONTEND (Angular) ---
+  banking-web:
+    build:
+      context: ./banking-web
+      dockerfile: Dockerfile
+    container_name: banking_web_ui
+    restart: always
+    ports:
+      - "4200:80" # Accederás al front por localhost:4200
+    depends_on:
+      - banking-api
+
+  # --- BASE DE DATOS (Tu configuración original) ---
   db-mariadb:
     image: mariadb:latest
     container_name: banking_db_server
     restart: always
     environment:
-      MARIADB_ROOT_PASSWORD: "Pichincha2025Root" # Contraseña Super Admin
+      MARIADB_ROOT_PASSWORD: "Pichincha2025Root"
       MARIADB_DATABASE: "BankingSystem"
       MARIADB_USER: "usuario_dev"
       MARIADB_PASSWORD: "Pichincha2025"
@@ -15,10 +43,9 @@ services:
       - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
-      # Mapeamos la carpeta 'scripts' local a la carpeta de inicio del contenedor
       - ./scripts:/docker-entrypoint-initdb.d
 
-  # Servicio 2: Administración General (Interfaz Web)
+  # --- PHPMYADMIN (Tu configuración original) ---
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: banking_admin_ui
@@ -26,9 +53,9 @@ services:
     depends_on:
       - db-mariadb
     ports:
-      - "8080:80" # Accederás por localhost:8080
+      - "8080:80"
     environment:
-      PMA_HOST: db-mariadb        # Debe coincidir con el nombre del servicio de arriba
+      PMA_HOST: db-mariadb
       PMA_PORT: 3306
       UPLOAD_LIMIT: 64M
 
